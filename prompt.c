@@ -1,4 +1,6 @@
 #include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * prompt - call prompt from another function (prompt)
@@ -16,8 +18,10 @@ void prompt(void)
 		place("$ ");
 		lenbuf = getline(&text, &bufsize, stdin);
 		if (lenbuf == -1)
+			free(text);
 			exit(98);
 		if (compareExit(text, "exit") == 0)
+			free(text);
 			exit(0);
 		if (compareEnv(text, "env") == 0)
 		{
@@ -40,8 +44,11 @@ void prompt(void)
 		child_pid = fork();
 		if (child_pid < 0)
 			perror("Error");
+		free(text);
 		if (child_pid == 0)
 			identify_string(text);
+		free(text);
 		else
 			wait(&status);
+		free(text);
 	}}
